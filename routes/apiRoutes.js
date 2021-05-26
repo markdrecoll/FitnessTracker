@@ -12,23 +12,43 @@ router.post("/workouts", (req, res) => {
   });
 
   router.get("/workouts", (req, res) => {
-    Workout.find({})
-      .then(dbWorkouts => {
-        res.json(dbWorkouts);
-      })
-      .catch(err => {
-        res.status(500).json(err);
-      });
+
+    Workout.aggregate([
+      {
+        $addFields: {
+          totalDuration: {
+            $sum: "$exercises.duration"
+          }
+        }
+      }
+    ])
+
+    .then(dbWorkouts => {
+          res.json(dbWorkouts);
+        })
+        .catch(err => {
+          res.status(500).json(err);
+        });
   });
   
   router.get("/workouts/range", (req, res) => {
-    Workout.find({}).limit(8)
-      .then(dbWorkouts => {
-        res.json(dbWorkouts);
-      })
-      .catch(err => {
-        res.status(500).json(err);
-      });
+
+    Workout.aggregate([
+      {
+        $addFields: {
+          totalDuration: {
+            $sum: "$exercises.duration"
+          }
+        }
+      }
+    ]).limit(7)
+
+    .then(dbWorkouts => {
+      res.json(dbWorkouts);
+    })
+    .catch(err => {
+      res.status(500).json(err);
+    });
   });
 
   router.delete("/workouts/range", (req, res) => {
