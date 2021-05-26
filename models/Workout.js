@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
+// schema for exercises
 const exercises = {
   type: {
     type: String,

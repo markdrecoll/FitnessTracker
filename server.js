@@ -12,6 +12,7 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
+// connect to heroku database if possible, otherwise connect to local database
 mongoose.connect(
   process.env.MONGODB_URI || 'mongodb://localhost/workout',
   {

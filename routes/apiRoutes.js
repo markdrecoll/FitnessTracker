@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const Workout = require("../models/Workout.js");
 
+// create a new workout
 router.post("/workouts", (req, res) => {
     Workout.create({})
       .then(dbWorkout => {
@@ -11,8 +12,8 @@ router.post("/workouts", (req, res) => {
       });
   });
 
+  // get all workouts, sum the total duration
   router.get("/workouts", (req, res) => {
-
     Workout.aggregate([
       {
         $addFields: {
@@ -22,7 +23,6 @@ router.post("/workouts", (req, res) => {
         }
       }
     ])
-
     .then(dbWorkouts => {
           res.json(dbWorkouts);
         })
@@ -30,9 +30,9 @@ router.post("/workouts", (req, res) => {
           res.status(500).json(err);
         });
   });
-  
-  router.get("/workouts/range", (req, res) => {
 
+  // limit the workouts to 7
+  router.get("/workouts/range", (req, res) => {
     Workout.aggregate([
       {
         $addFields: {
@@ -42,7 +42,6 @@ router.post("/workouts", (req, res) => {
         }
       }
     ]).limit(7)
-
     .then(dbWorkouts => {
       res.json(dbWorkouts);
     })
@@ -50,13 +49,15 @@ router.post("/workouts", (req, res) => {
       res.status(500).json(err);
     });
   });
-
+  
+  // delete a workout
   router.delete("/workouts/range", (req, res) => {
       Workout.findByIdAndDelete(body.id)
       .then()
       .catch(err => { res.status(500).json(err) })
   });
-
+  
+  // new workout
   router.put("/workouts/:id", ({ body, params }, res) => {
     Workout.findByIdAndUpdate(
       params.id,
