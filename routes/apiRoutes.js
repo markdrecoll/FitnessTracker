@@ -59,6 +59,7 @@ router.post("/workouts", (req, res) => {
   
   // new workout
   router.put("/workouts/:id", ({ body, params }, res) => {
+    //where things are breaking
     Workout.findByIdAndUpdate(
       params.id,
       { $push: { exercises: body } },
